@@ -1,65 +1,69 @@
-import Image from "next/image";
+"use client"
+
+import { useEffect, useState } from "react"
+import VideoCard from "@/components/VideoCard"
+import VideoModal from "@/components/VideoModal"
+import Image from "next/image"
 
 export default function Home() {
+  const [videos, setVideos] = useState([])
+  const [selected, setSelected] = useState<any>(null)
+
+  useEffect(() => {
+    fetch("/api/videos")
+      .then(res => res.json())
+      .then(data => setVideos(data))
+  }, [])
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <main className="relative z-10 px-6 md:px-12 pt-6 pb-10">
+
+      {/* LOGO */}
+      <div className="flex justify-center mb-4">
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+          src="/logo-insomniak.png"
+          alt="Insomniak Logo"
+          width={500}
+          height={500}
+          className="w-[460px] md:w-[520px] drop-shadow-[0_0_30px_#00F5FF]"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+      </div>
+
+      {/* GRID */}
+      <div className="grid md:grid-cols-3 gap-6">
+        {videos.map((video: any) => (
+          <VideoCard
+            key={video.id}
+            video={video}
+            onClick={() => setSelected(video)}
+          />
+        ))}
+      </div>
+
+      {selected && (
+        <VideoModal
+          video={selected}
+          onClose={() => setSelected(null)}
+        />
+      )}
+
+      {/* WHATSAPP FLOATING BUTTON */}
+      <a
+        href="https://wa.me/549XXXXXXXXXX"
+        target="_blank"
+        className="fixed bottom-6 right-6 bg-gradient-to-r from-cyan-400 to-pink-500 p-4 rounded-full shadow-[0_0_20px_#00F5FF] hover:scale-110 transition-all"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="white"
+          viewBox="0 0 24 24"
+          width="28"
+          height="28"
+        >
+          <path d="M12.04 2C6.55 2 2.04 6.5 2.04 12c0 1.98.58 3.82 1.57 5.38L2 22l4.76-1.56A9.94 9.94 0 0012.04 22c5.49 0 10-4.5 10-10S17.53 2 12.04 2zm0 18.18c-1.7 0-3.3-.45-4.69-1.24l-.34-.2-2.83.93.93-2.76-.22-.36A8.08 8.08 0 014 12c0-4.44 3.6-8.04 8.04-8.04S20.08 7.56 20.08 12s-3.6 8.18-8.04 8.18zm4.44-6.13c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.42-1.34-1.66-.14-.24-.02-.36.1-.48.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.48-.4-.42-.54-.42h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.16 1.7 2.6 4.12 3.64.58.26 1.04.42 1.4.54.58.18 1.1.16 1.52.1.46-.06 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z" />
+        </svg>
+      </a>
+
+    </main>
+  )
 }

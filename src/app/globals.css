@@ -1,26 +1,315 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* =========================
+   BASE
+========================= */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000000;
+  overflow-x: hidden;
+  font-family: sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* =========================
+   CRT CURVATURE
+========================= */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255,255,255,0.05) 0%,
+    rgba(0,0,0,0.6) 80%
+  );
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 5;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* =========================
+   SCANLINES
+========================= */
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(250, 3, 3, 0.08) 0px,
+    rgba(255,255,255,0.08) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 6;
+}
+
+/* =========================
+   RGB DISTORTION
+========================= */
+
+.glitch-screen {
+  position: relative;
+  animation: rgbDistort 3s infinite;
+}
+
+/* =========================
+   GLITCH TITLE EXTREMO
+========================= */
+
+.glitch {
+  position: relative;
+  color: white;
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  animation: violentSkew 0.8s infinite alternate;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.glitch::before {
+  left: 3px;
+  text-shadow: -3px 0 red;
+  animation: glitchTop 0.6s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  left: -3px;
+  text-shadow: -3px 0 cyan;
+  animation: glitchBottom 0.6s infinite linear alternate-reverse;
+}
+
+/* =========================
+   RANDOM HORIZONTAL TEAR
+========================= */
+
+@keyframes violentSkew {
+  0% { transform: skew(0deg); }
+  20% { transform: skew(5deg); }
+  40% { transform: skew(-5deg); }
+  60% { transform: skew(3deg); }
+  80% { transform: skew(-3deg); }
+  100% { transform: skew(0deg); }
+}
+
+@keyframes glitchTop {
+  0% { clip-path: inset(0 0 80% 0); transform: translate(-5px,-5px); }
+  50% { clip-path: inset(0 0 40% 0); transform: translate(5px,5px); }
+  100% { clip-path: inset(0 0 70% 0); transform: translate(-3px,3px); }
+}
+
+@keyframes glitchBottom {
+  0% { clip-path: inset(60% 0 0 0); transform: translate(5px,5px); }
+  50% { clip-path: inset(40% 0 0 0); transform: translate(-5px,-5px); }
+  100% { clip-path: inset(50% 0 0 0); transform: translate(3px,-3px); }
+}
+
+@keyframes rgbDistort {
+  0% { transform: translate(0); }
+  10% { transform: translate(-2px,2px); }
+  20% { transform: translate(2px,-2px); }
+  30% { transform: translate(-3px,1px); }
+  40% { transform: translate(3px,-1px); }
+  50% { transform: translate(0); }
+  60% { transform: translate(1px,-3px); }
+  70% { transform: translate(-1px,3px); }
+  80% { transform: translate(2px,2px); }
+  90% { transform: translate(-2px,-2px); }
+  100% { transform: translate(0); }
+}
+
+/* =========================
+   SIGNAL DROP
+========================= */
+
+@keyframes screenFlicker {
+  0%, 96%, 100% { opacity: 1; }
+  97% { opacity: 0.7; }
+  98% { opacity: 0.4; }
+  99% { opacity: 0.8; }
+}
+
+
+/* =========================
+   LIGHTNING EFFECT
+========================= */
+
+.lightning {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 7;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 40%, 
+    rgba(0,245,255,0.6) 0%,
+    rgba(0,245,255,0.3) 20%,
+    rgba(0,0,0,0) 60%);
+  mix-blend-mode: screen;
+  animation: lightningFlash 12s infinite;
+}
+
+@keyframes lightningFlash {
+  0%, 92%, 100% {
+    opacity: 0;
+  }
+  93% {
+    opacity: 0.8;
+  }
+  94% {
+    opacity: 0.2;
+  }
+  95% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* =========================
+   VERTICAL LIGHT VOLUME
+========================= */
+
+.light-beams {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,245,255,0.08) 0px,
+      rgba(0,245,255,0.08) 2px,
+      transparent 2px,
+      transparent 120px
+    );
+  animation: beamsMove 20s linear infinite;
+  mix-blend-mode: screen;
+}
+
+/* =========================
+   ATMOSPHERIC FOG
+========================= */
+
+.fog {
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 4;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(0,245,255,0.25), transparent 60%),
+    radial-gradient(circle at 20% 0%, rgba(138,43,226,0.2), transparent 60%);
+  animation: fogDrift 25s ease-in-out infinite alternate;
+  filter: blur(80px);
+}
+
+/* =========================
+   DIGITAL DUST FALL
+========================= */
+
+.digital-rain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 1px);
+  background-size: 2px 25px;
+  animation: rainFall 8s linear infinite;
+  opacity: 0.18;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes beamsMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 400px 0; }
+}
+
+@keyframes fogDrift {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(40px); }
+}
+
+@keyframes rainFall {
+  0% { background-position: 0 -200px; }
+  100% { background-position: 0 200px; }
+}
+
+/* =========================
+   ADMIN INPUT STYLE
+========================= */
+
+input {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  color: white;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+input::placeholder {
+  color: rgba(0, 245, 255, 0.6);
+  letter-spacing: 1px;
+  font-weight: 500;
+  transition: opacity 0.3s ease;
+}
+
+input:focus {
+  border-color: #00F5FF;
+  box-shadow:
+    0 0 8px rgba(0,245,255,0.6),
+    0 0 20px rgba(0,245,255,0.2);
+  outline: none;
+}
+
+input:focus::placeholder {
+  opacity: 0.3;
+}
+
+/* =========================
+   BUTTON STYLE
+========================= */
+
+button {
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  box-shadow:
+    0 0 10px rgba(0,245,255,0.6),
+    0 0 25px rgba(0,245,255,0.3);
+}
+
+.visual-glitch-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  animation: rgbDistort 4s infinite;
+}
+
+@keyframes rgbDistort {
+  0% { transform: translate(0); }
+  25% { transform: translate(-1px,1px); }
+  50% { transform: translate(1px,-1px); }
+  75% { transform: translate(-1px,-1px); }
+  100% { transform: translate(0); }
 }
