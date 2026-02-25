@@ -6,12 +6,18 @@ async function runMigration() {
   try {
     console.log('Ejecutando migración...');
     
-    // Leer el esquema SQL
-    const schemaPath = path.join(__dirname, '../src/lib/schema.sql');
-    const schema = readFileSync(schemaPath, 'utf8');
-    
-    // Ejecutar el esquema
-    await sql`${schema}`;
+    // Crear la tabla directamente
+    await sql`
+      CREATE TABLE IF NOT EXISTS videos (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        youtube_url TEXT NOT NULL,
+        tecnica TEXT,
+        ideal_para TEXT,
+        colores TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `;
     console.log('✅ Tabla videos creada exitosamente');
     
     // Migrar datos existentes

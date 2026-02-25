@@ -11,7 +11,7 @@ export default function VideoCard({ video, onClick }: Props) {
   return (
     <div
       onClick={onClick}
-      className="bg-gray-900 p-4 rounded-xl cursor-pointer hover:scale-105 transition-all border border-gray-800 hover:shadow-[0_0_20px_#00F5FF]"
+      className="bg-transparent/10 backdrop-blur-sm p-4 rounded-xl cursor-pointer hover:scale-105 transition-all border border-gray-800 hover:shadow-[0_0_20px_#00F5FF]"
     >
       <img
         src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}

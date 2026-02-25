@@ -17,11 +17,13 @@ export default function VideoModal({ video, onClose }: Props) {
         >
           ✕
         </button>
+        <div className="relative w-full pb-[56.25%] rounded-lg overflow-hidden bg-black">
         <iframe
           className="w-full aspect-video rounded-xl"
           src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
           allowFullScreen
         />
+        </div>
       </div>
     </div>
   )
