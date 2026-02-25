@@ -4,6 +4,6 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "env": {
-    "DATABASE_URL": "@database_url"
+    "DATABASE_URL": "postgresql://neondb_owner:npg_craTvLqok8E2@ep-polished-heart-ai13x11w-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require"
   }
 }
